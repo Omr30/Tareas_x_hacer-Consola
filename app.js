@@ -1,6 +1,6 @@
 require('colors');
 const { guardarDB, leerDb } = require('./helpers/guardarArchivo');
-const { inquirerMenu, pausa, leerInput, listadoTareasBorrar } = require('./helpers/inquirer');
+const { inquirerMenu, pausa, leerInput, listadoTareasBorrar, confirmar } = require('./helpers/inquirer');
 const Tareas = require('./models/tareas');
 
 
@@ -43,8 +43,13 @@ const main = async() => {
 
             case '6': //borrar tareas
                 const id = await listadoTareasBorrar( tareas.listadoArr );
-                // TODO: preguntar si esta seguro
-                console.log({id});
+                if( id !== '0'){
+                    const ok = await confirmar('Esta seguro?');
+                    if( ok ) {
+                        tareas.borrarTarea( id );
+                        console.log('Tarea borrada');
+                    }
+                }
                 break;
         };
 
